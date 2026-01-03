@@ -52,5 +52,6 @@ Omit unused fields.`,
   });
 
 
-  return result.toAIStreamResponse();
+  return result.toDataStreamResponse();
+
 }

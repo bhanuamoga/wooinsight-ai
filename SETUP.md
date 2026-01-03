@@ -5,7 +5,7 @@
 2. Fill all values:
    - Get `NEXTAUTH_SECRET` from https://generate-secret.vercel.app/32
    - Get WooCommerce keys from: **WooCommerce > Settings > Advanced > REST API**
-   - Get `DASHSCOPE_API_KEY` from https://dashscope.console.aliyun.com/apiKey
+   - Get `OPENAI_API_KEY' from :""
    - Get `DATABASE_URL` from [Neon.tech](https://neon.tech) (free)
 
 ## 🛠️ Step 2: Run Locally
