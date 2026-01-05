@@ -37,10 +37,7 @@ function extractDateRange(query: string): DateRange {
 const openrouter = createOpenAI({
   apiKey: process.env.OPENROUTER_API_KEY!,
   baseURL: 'https://openrouter.ai/api/v1',
-  headers: {
-    'HTTP-Referer': 'http://localhost:3000', // required by OpenRouter
-    'X-Title': 'WooInsight AI',               // required by OpenRouter
-  },
+
 });
 export async function POST(req: Request) {
   const { messages } = await req.json();
@@ -237,7 +234,7 @@ ${topSellersStr}
 `.trim();
 
   const result = await streamText({
-    model: openrouter('qwen/qwen3-235b-a22b'),
+    model: openrouter('qwen/qwen3-max'),
     system: `
 You are an e-commerce analyst.
 

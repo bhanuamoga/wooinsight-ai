@@ -1,5 +1,6 @@
 // lib/woo.ts
 
+
 const STORE_URL = process.env.WOOCOMMERCE_STORE_URL;
 const CONSUMER_KEY = process.env.WOOCOMMERCE_CONSUMER_KEY;
 const CONSUMER_SECRET = process.env.WOOCOMMERCE_CONSUMER_SECRET;
@@ -16,7 +17,6 @@ const authHeader = `Basic ${Buffer.from(
 async function wooGetV3<T = any>(
   path: string,
   params: Record<string, string> = {},
-  revalidateSeconds = 1200
 ): Promise<T> {
   const url = new URL(`/wp-json/wc/v3/${path}`, STORE_URL);
 
@@ -24,7 +24,7 @@ async function wooGetV3<T = any>(
 
   const res = await fetch(url.toString(), {
     headers: { Authorization: authHeader },
-    next: { revalidate: revalidateSeconds },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -38,7 +38,6 @@ async function wooGetV3<T = any>(
 async function wooGetAnalytics<T = any>(
   path: string,
   params: Record<string, string> = {},
-  revalidateSeconds = 60
 ): Promise<T> {
   const url = new URL(`/wp-json/wc-analytics/${path}`, STORE_URL);
 
@@ -46,7 +45,7 @@ async function wooGetAnalytics<T = any>(
 
   const res = await fetch(url.toString(), {
     headers: { Authorization: authHeader },
-    next: { revalidate: revalidateSeconds },
+     cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -68,7 +67,7 @@ export async function fetchWooOrders(params: Record<string, string> = {}) {
     order: params.order ?? 'desc',
   };
 
-  return wooGetV3('orders', { ...defaultParams, ...params }, 60);
+  return wooGetV3('orders', { ...defaultParams, ...params });
 }
 
 /**
@@ -80,7 +79,7 @@ export async function fetchWooProducts(params: Record<string, string> = {}) {
     per_page: '100',
   };
 
-  return wooGetV3('products', { ...defaultParams, ...params }, 300);
+  return wooGetV3('products', { ...defaultParams, ...params });
 }
 
 /**
@@ -91,7 +90,7 @@ export async function fetchWooCustomers(params: Record<string, string> = {}) {
     per_page: '100',
   };
 
-  return wooGetV3('customers', { ...defaultParams, ...params }, 300);
+  return wooGetV3('customers', { ...defaultParams, ...params });
 }
 
 /**
@@ -102,7 +101,7 @@ export async function fetchWooCoupons(params: Record<string, string> = {}) {
     per_page: '100',
   };
 
-  return wooGetV3('coupons', { ...defaultParams, ...params }, 300);
+  return wooGetV3('coupons', { ...defaultParams, ...params });
 }
 
 /**
@@ -115,7 +114,7 @@ export async function fetchWooCategories(
     per_page: '100',
   };
 
-  return wooGetV3('products/categories', { ...defaultParams, ...params }, 300);
+  return wooGetV3('products/categories', { ...defaultParams, ...params });
 }
 
 /**
@@ -129,7 +128,7 @@ export async function fetchWooSalesReport(
   params: Record<string, string> = {}
 ) {
   // params can include: period, date_min, date_max, etc.
-  return wooGetV3('reports/sales', params, 300);
+  return wooGetV3('reports/sales', params);
 }
 
 // Top sellers (top 5, top 10, etc.)
@@ -140,32 +139,32 @@ export async function fetchWooTopSellers(
     per_page: '5',
   };
 
-  return wooGetV3('reports/top_sellers', { ...defaultParams, ...params }, 300);
+  return wooGetV3('reports/top_sellers', { ...defaultParams, ...params });
 }
 
 // Orders totals
 export async function fetchWooOrdersTotals() {
-  return wooGetV3('reports/orders/totals', {}, 300);
+  return wooGetV3('reports/orders/totals', {});
 }
 
 // Products totals
 export async function fetchWooProductsTotals() {
-  return wooGetV3('reports/products/totals', {}, 300);
+  return wooGetV3('reports/products/totals', {});
 }
 
 // Customers totals
 export async function fetchWooCustomersTotals() {
-  return wooGetV3('reports/customers/totals', {}, 300);
+  return wooGetV3('reports/customers/totals', {});
 }
 
 // Coupons totals
 export async function fetchWooCouponsTotals() {
-  return wooGetV3('reports/coupons/totals', {}, 300);
+  return wooGetV3('reports/coupons/totals', {});
 }
 
 // Reviews totals
 export async function fetchWooReviewsTotals() {
-  return wooGetV3('reports/reviews/totals', {}, 300);
+  return wooGetV3('reports/reviews/totals', {});
 }
 
 /**
@@ -183,33 +182,33 @@ export async function fetchWooRevenueStats(
   // after: '2025-01-01T00:00:00Z'
   // before: '2025-01-31T23:59:59Z'
   // page, per_page, orderby, order
-  return wooGetAnalytics('reports/revenue/stats', params, 300);
+  return wooGetAnalytics('reports/revenue/stats', params);
 }
 
 // Orders stats
 export async function fetchWooOrdersStats(
   params: Record<string, string> = {}
 ) {
-  return wooGetAnalytics('reports/orders/stats', params, 300);
+  return wooGetAnalytics('reports/orders/stats', params);
 }
 
 // Products stats
 export async function fetchWooProductsStats(
   params: Record<string, string> = {}
 ) {
-  return wooGetAnalytics('reports/products/stats', params, 300);
+  return wooGetAnalytics('reports/products/stats', params);
 }
 
 // Customers stats
 export async function fetchWooCustomersStats(
   params: Record<string, string> = {}
 ) {
-  return wooGetAnalytics('reports/customers/stats', params, 300);
+  return wooGetAnalytics('reports/customers/stats', params);
 }
 
 // Coupons stats
 export async function fetchWooCouponsStats(
   params: Record<string, string> = {}
 ) {
-  return wooGetAnalytics('reports/coupons/stats', params, 300);
+  return wooGetAnalytics('reports/coupons/stats', params);
 }
